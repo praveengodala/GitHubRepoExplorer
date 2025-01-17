@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">GitHubRepoExplorer</string>
+    <string name="generic_error">Oops, something unexpected happened</string>
+    <string name="retry">Retry</string>
+</resources>
