@@ -24,11 +24,9 @@ class GitHubRepoViewModel @Inject constructor(private val gitHubUseCase: GitHubU
 
             when(val result = gitHubUseCase.getTopRepositories()) {
                 is APIResult.Success -> {
-                    println("APIResult.Success: ${result.data}")
                     _uiState.value = UiState.Success(result.data)
                 }
                 is APIResult.Failure -> {
-                    println("APIResult.Failure: exception: ${result.exception}")
                     _uiState.value = UiState.Failure(R.string.generic_error)
                 }
             }

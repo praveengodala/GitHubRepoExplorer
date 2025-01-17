@@ -94,11 +94,9 @@ class GitHubUseCaseTest {
             )
             coEvery {
                 getTopContributor("Owner1", "Repo1")
-            } throws Exception("Exception")
-
-//            returns APIResult.Failure(
-//                Exception("Failed to fetch top contributor")
-//            )
+            } returns APIResult.Failure(
+                Exception("Failed to fetch top contributor")
+            )
             coEvery {
                 getTopContributor("Owner2", "Repo2")
             } returns APIResult.Success(
