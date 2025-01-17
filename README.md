@@ -27,6 +27,7 @@
 - **Gson**: For JSON parsing.
 - **Hilt**: For dependency injection.
 - **LiveData**: For observing and managing UI data.
+- **Mockk & Junit**: For unit testing
 
 # Architecture
 - **MVVM** (Model-View-ViewModel) with **Clean Architecture** principles.
@@ -36,6 +37,7 @@
     - Layers are clearly separated, making it easier to maintain and extend.
     - Outer layers depend on inner layers, but not vice versa (e.g., the data layer can depend on the domain layer, but not the other way around).
     - MVVM ensures that the UI layer remains lightweight, moving UI-related logic to the ViewModel and non-UI business logic to the Domain/Data layer.
+    - ViewModel survives configuration changes
 
 - **Testability**:
     - This architecture makes it easier to mock and test across layers, improving the reliability of the application.
@@ -44,11 +46,13 @@
     - The separation of concerns and modular structure enhance the ability to scale the application in both features and complexity.
 
 # Trade-offs / Considerations
-1. **Handling 101 API calls (100 repositories + 1 for top contributor per repo)**:
-    - Non-authenticated users are rate-limited to 60 requests per hour. To mitigate this, I added an access token for an authorized user to extend the rate limit.
+1. **Authenticated users vs Non-authenticated users**
+    - I need to make 101 API calls (1 for top 100 repositories + 1 for top contributor per repo)
+    - Non-authenticated users are rate-limited to 60 requests per hour.
+    - To mitigate this, I added a provision to add access token and work as authorized User to extend the rate limit (5000 requests per hour).
 
-2. **Pagination or fetching all data at once?**
-    - For simplicity and within the time constraints while satisfying the core functionality, I opted to fetch all 100 repositories and their top contributors in a single request.
+2. **Pagination vs fetching all data at once?**
+    - For simplicity and within the time constraints while satisfying the core functionality, I opted to fetch all 100 repositories and their top contributors in a single request. 
     - **Concurrency**: I used the `async` coroutine builder to launch 100 concurrent coroutines.
     - **Optimized for network**: I used the `IO` dispatcher to optimize for network-bound tasks, ensuring parallel execution of coroutines.
     - **Caching**: I added OkHttp caching to leverage `Cache-Control` and `ETag` headers supported by GitHub's REST API. OkHttp automatically handles caching based on the response headers and request configurations.
