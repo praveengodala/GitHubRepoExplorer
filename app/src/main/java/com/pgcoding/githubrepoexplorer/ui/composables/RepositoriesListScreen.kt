@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pgcoding.githubrepoexplorer.R
+import com.pgcoding.githubrepoexplorer.domain.models.Repository
 import com.pgcoding.githubrepoexplorer.domain.models.RepositoryWithTopContributor
 import com.pgcoding.githubrepoexplorer.ui.GitHubRepoViewModel
 import com.pgcoding.githubrepoexplorer.ui.UiState
@@ -96,15 +97,29 @@ fun TopRepositories(
             }
         }
         is UiState.Success -> {
-            val repositories = uiState.repositories
             LazyColumn(
                 modifier = modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(repositories) { item: RepositoryWithTopContributor ->
+                items(
+                    items = uiState.repositories,
+                    key = { it.id }
+                ) { repositoryState ->
                     RepositoryItem(
                         modifier = Modifier.padding(16.dp),
-                        repoItem = item
+                        repoName = repositoryState.repoName,
+                        stars = repositoryState.stars,
+                        topContributorName = when (repositoryState) {
+                            is Repository -> {
+                                // loading placeholder. Can be improved to show
+                                // popular shimmer placeholder while the data loads
+                                stringResource(R.string.generic_loading_text)
+                            }
+
+                            is RepositoryWithTopContributor -> {
+                                repositoryState.topContributorName
+                            }
+                        }
                     )
                     HorizontalDivider(color = colorResource(R.color.colorGray2))
                 }

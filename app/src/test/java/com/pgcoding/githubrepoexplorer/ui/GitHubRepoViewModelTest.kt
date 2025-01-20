@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.pgcoding.githubrepoexplorer.Description
 import com.pgcoding.githubrepoexplorer.R
 import com.pgcoding.githubrepoexplorer.domain.core.APIResult
+import com.pgcoding.githubrepoexplorer.domain.models.Repository
 import com.pgcoding.githubrepoexplorer.domain.models.RepositoryWithTopContributor
 import com.pgcoding.githubrepoexplorer.domain.usecases.GitHubUseCase
 import io.mockk.coEvery
@@ -49,9 +50,14 @@ class GitHubRepoViewModelTest {
     @Test
     @Description("Test FetchTopRepositories emit success state when api call succeeds")
     fun testFetchTopRepositories_Success()  = runTest {
+        val mockRepositories = createMockRepositories()
         coEvery {
-            mockGitHubUseCase.getTopRepositories()
-        } returns APIResult.Success(createMockRepositories())
+            mockGitHubUseCase.getRepositories()
+        } returns APIResult.Success(mockRepositories)
+
+        coEvery {
+            mockGitHubUseCase.getRepositoriesWithTopContributors(mockRepositories)
+        } returns createMockRepositoriesWithContributors()
 
         // assert that beginning state is UiState.Loading before fetch
         assertEquals(UiState.Loading, viewModel.uiState.value)
@@ -84,7 +90,7 @@ class GitHubRepoViewModelTest {
     @Test
     @Description("Test FetchTopRepositories emit failure state when api call fails")
     fun testFetchTopRepositories_Failure() = runTest {
-        coEvery { mockGitHubUseCase.getTopRepositories() } returns APIResult.Failure(Exception())
+        coEvery { mockGitHubUseCase.getRepositories() } returns APIResult.Failure(Exception())
 
         // assert that beginning state is UiState.Loading before fetch
         assertEquals(UiState.Loading, viewModel.uiState.value)
@@ -102,7 +108,24 @@ class GitHubRepoViewModelTest {
     // Helper methods
     //================================================================================
 
-    private fun createMockRepositories(): List<RepositoryWithTopContributor> {
+    private fun createMockRepositories(): List<Repository> {
+        return listOf(
+            Repository(
+                id = 1000,
+                repoName = "TopRepo1",
+                ownerName = "OwnerName1",
+                stars = 100
+            ),
+            Repository(
+                id = 1001,
+                repoName = "TopRepo2",
+                ownerName = "OwnerName2",
+                stars = 98
+            )
+        )
+    }
+
+    private fun createMockRepositoriesWithContributors(): List<RepositoryWithTopContributor> {
         return listOf(
             RepositoryWithTopContributor(
                 id = 1000,

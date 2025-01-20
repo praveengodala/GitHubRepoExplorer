@@ -24,13 +24,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pgcoding.githubrepoexplorer.R
-import com.pgcoding.githubrepoexplorer.domain.models.RepositoryWithTopContributor
 import com.pgcoding.githubrepoexplorer.ui.theme.GitHubExplorerTheme
 
 @Composable
 fun RepositoryItem(
     modifier: Modifier = Modifier,
-    repoItem: RepositoryWithTopContributor
+    repoName: String,
+    stars: Int,
+    topContributorName: String?
 ) {
     Column(
         modifier = modifier
@@ -55,7 +56,7 @@ fun RepositoryItem(
                     tint = colorResource(R.color.colorBlue)
                 )
                 Text(
-                    text = repoItem.repoName,
+                    text = repoName,
                     style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
@@ -74,7 +75,7 @@ fun RepositoryItem(
                 )
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
-                    text = repoItem.stars.toString(),
+                    text = stars.toString(),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -82,7 +83,7 @@ fun RepositoryItem(
         Spacer(modifier = Modifier.height(16.dp))
 
         // Row for top contributor count icon and name only when available
-        repoItem.topContributorName?.let {
+        topContributorName?.let {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -95,7 +96,7 @@ fun RepositoryItem(
                     tint = colorResource(R.color.colorGray1)
                 )
                 Text(
-                    text = repoItem.topContributorName.toString(),
+                    text = it,
                     style = MaterialTheme.typography.bodyLarge.copy(letterSpacing = 0.5.sp)
                 )
             }
@@ -109,12 +110,9 @@ fun RepositoryItemPreview() {
     GitHubExplorerTheme {
         RepositoryItem(
             modifier = Modifier.padding(16.dp),
-            repoItem = RepositoryWithTopContributor(
-                id = 1,
-                repoName = "Repository Name",
-                stars = 354123,
-                topContributorName = "Top Contributor"
-            )
+            repoName = "Repository Name",
+            stars = 354123,
+            topContributorName = "Top Contributor"
         )
     }
 }

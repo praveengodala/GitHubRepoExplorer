@@ -1,8 +1,8 @@
 package com.pgcoding.githubrepoexplorer.domain.models
 
 data class RepositoryWithTopContributor(
-    val id: Long,
-    val repoName: String,
-    val stars: Int,
+    override val id: Long,
+    override val repoName: String,
+    override val stars: Int,
     val topContributorName: String?
-)
+): RepositoryState()
