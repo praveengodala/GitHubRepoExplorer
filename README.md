@@ -69,8 +69,11 @@
     - I used **Gson** for its simplicity and wide usage, making it a suitable choice given the limited time constraints of the project.
     - Future improvements could include switching to **Moshi** or **Kotlin Serialization**, which offer better Kotlin support and more built-in features, like custom parsing without needing `TypeAdapters`.
 
-# Future Improvements/Enhancements
+# Future Improvements/Enhancements:
 - **Pagination**: Implement pagination using the **Paging3** library, which offers excellent support for Kotlin Coroutines, Flows, and responsive UI design with retries.
 - **Add Room database**: Implement `Room` for local database management. Given the architecture of this app, the implementation would be abstracted away in the data layer where GitHubRepositoryImpl would act as source of truth and have a strategy around fetching data from Room (local database) or the remote API based on the availability / freshness of data.
 - **Migrate to using Flows**: Consider switching to using **Flow/MutableStateFlow** if we were to implement **Pagination** or add functionality like Search, so we could leverage Flow capabilities and operators (`Zip`, `Combine` etc.).
 - **Migration to Moshi / Kotlin Serialization**: Consider switching to these libraries for better Kotlin support and enhanced parsing capabilities, eliminating the need for `TypeAdapter` handling.
+
+# Demo:
+[Screen_recording_20250119_213731.webm](https://github.com/user-attachments/assets/80108af2-d871-4174-9b33-1a9f4b179897)
